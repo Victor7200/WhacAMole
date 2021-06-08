@@ -17,10 +17,11 @@ public class GameController : MonoBehaviour
     public float gameDuration = 60f;
     public float timePlayed;
 
-    float points = 0;
+    int points = 0;
     int clicks = 0;
     int record = 0;
-    int highScoreKey;
+    int clicksTotales;
+    int recordGuardado = 0;
     int failedClicks = 0;
 
     public TMP_InputField nameField;
@@ -89,15 +90,17 @@ public class GameController : MonoBehaviour
 
         timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed);
 
-        recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
-        SaveRecord();
+        clicksTotales = clicks + failedClicks;
+
+        /*recordText.text = PlayerPrefs.GetInt(recordGuardado, 0).ToString();
+        SaveRecord();*/
     }
 
 
     void ShowEndScreen()
     {
         endScreen.SetActive(true);
-        infoGame.text = " Total points : " + "000" + "\n Record: " + "100" + "\n 10" + "% good shots \n" + "999" + " bad shots";
+        infoGame.text = " Total points : " + points + "\n Record: " + recordGuardado + "por " + nameField + "\n " + (clicks*100/clicksTotales) + "% good shots \n" + failedClicks + " bad shots";
 
         bool isRecord = false;
         //si hay nuevo record mostrar el panel recordPanel
@@ -185,6 +188,12 @@ public class GameController : MonoBehaviour
                         mole.OnHitMole();
                         points += 100;
                     }
+
+                    clicks++;
+                }
+                else
+                {
+                    failedClicks++;
                 }
             }
         }
@@ -202,15 +211,16 @@ public class GameController : MonoBehaviour
         playing = true;
     }
 
-    public void SaveRecord()
+    /*public void SaveRecord()
     {
-        if (points > PlayerPrefs.GetInt(highScoreKey, record))
+        if (points > PlayerPrefs.GetInt(recordGuardado, record))
         {
-            PlayerPrefs.SetInt(highScoreKey, points);
+            recordPanel.SetActive(true);
+            PlayerPrefs.SetInt(recordGuardado, points);
             PlayerPrefs.Save();
             recordText.text = record.ToString();
         }
-    }
+    }*/
 
     /// <summary>
     /// Funcion para entrar en pausa, pone playing en false y muestra la pantalla de pausa.
