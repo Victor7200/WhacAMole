@@ -7,7 +7,7 @@ using TMPro;
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
-    public GameObject mainMenu, inGameUI,endScreen,recordPanel;
+    public GameObject mainMenu, inGameUI, endScreen, recordPanel;
 
     public Transform molesParent;
     private MoleBehaviour[] moles;
@@ -21,13 +21,12 @@ public class GameController : MonoBehaviour
     int clicks = 0;
     int record = 0;
     int clicksTotales;
-    int recordGuardado = 0;
-    int failedClicks = 0;
+    int failedClicks;
 
     public TMP_InputField nameField;
     string playerName;
 
-    public TextMeshProUGUI infoGame, pointsText,timeText,recordText;
+    public TextMeshProUGUI infoGame, pointsText,timeText,recordText,highScoreKeyText;
 
     void Awake()
     {
@@ -80,6 +79,7 @@ public class GameController : MonoBehaviour
                     moles[i].StopMole();
                 }      
             }
+
             else
             {
                 CheckClicks();
@@ -92,19 +92,18 @@ public class GameController : MonoBehaviour
 
         clicksTotales = clicks + failedClicks;
 
-        /*recordText.text = PlayerPrefs.GetInt(recordGuardado, 0).ToString();
-        SaveRecord();*/
+        highScoreKeyText.text = PlayerPrefs.GetString(("playerName").ToString()) + ": " + PlayerPrefs.GetInt(("highScoreKey").ToString());
+
+        recordText.text = "Récord: " + PlayerPrefs.GetInt(("highScoreKey").ToString()) + " por Víctor "; //PlayerPrefs.GetString(("playerName").ToString());
+
+        SaveRecord();
     }
 
 
     void ShowEndScreen()
     {
         endScreen.SetActive(true);
-        infoGame.text = " Total points : " + points + "\n Record: " + recordGuardado + "por " + nameField + "\n " + (clicks*100/clicksTotales) + "% good shots \n" + failedClicks + " bad shots";
-
-        bool isRecord = false;
-        //si hay nuevo record mostrar el panel recordPanel
-        recordPanel.SetActive(isRecord);
+        infoGame.text = " Total points : " + points + "\n " +  "\n " + (clicks*100/clicksTotales) + "% clicks acertados \n" + failedClicks + " clicks fallados";
     }
 
     /// <summary>
@@ -115,8 +114,6 @@ public class GameController : MonoBehaviour
         //Guardar record si es necesario
 
         //Acceso al texto escrito
-        playerName = nameField.text;
-        Debug.Log("Record de " + playerName);
 
         //Reinicia información del juego
         ResetGame();
@@ -148,6 +145,9 @@ public class GameController : MonoBehaviour
         points = 0;
         clicks = 0;
         failedClicks = 0;
+        PlayerPrefs.SetString("playerName", nameField.ToString());
+        PlayerPrefs.Save();
+        Debug.Log("Record de " + nameField);
     }
 
     public void EnterMainScreen()
@@ -211,16 +211,16 @@ public class GameController : MonoBehaviour
         playing = true;
     }
 
-    /*public void SaveRecord()
+    public void SaveRecord()
     {
-        if (points > PlayerPrefs.GetInt(recordGuardado, record))
+        if (points > PlayerPrefs.GetInt("highScoreKey", record))
         {
             recordPanel.SetActive(true);
-            PlayerPrefs.SetInt(recordGuardado, points);
+
+            PlayerPrefs.SetInt("highScoreKey", points);
             PlayerPrefs.Save();
-            recordText.text = record.ToString();
         }
-    }*/
+    }
 
     /// <summary>
     /// Funcion para entrar en pausa, pone playing en false y muestra la pantalla de pausa.

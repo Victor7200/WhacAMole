@@ -90,6 +90,4 @@ public class MoleBehaviour : MonoBehaviour
         newPos.y -= 1.0f;
         transform.position = newPos;
     }
-
-
 }
