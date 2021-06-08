@@ -17,14 +17,16 @@ public class GameController : MonoBehaviour
     public float gameDuration = 60f;
     public float timePlayed;
 
-    int points = 0;
+    float points = 0;
     int clicks = 0;
+    int record = 0;
+    int highScoreKey;
     int failedClicks = 0;
 
     public TMP_InputField nameField;
     string playerName;
 
-    public TextMeshProUGUI infoGame;
+    public TextMeshProUGUI infoGame, pointsText,timeText,recordText;
 
     void Awake()
     {
@@ -75,16 +77,20 @@ public class GameController : MonoBehaviour
                 for (int i = 0; i < moles.Length; i++)
                 {
                     moles[i].StopMole();
-                }
-
-                
+                }      
             }
             else
             {
                 CheckClicks();
-            }
-            
+            }         
         }
+
+        pointsText.text = "Puntuación: " + points;
+
+        timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed);
+
+        recordText.text = PlayerPrefs.GetInt(highScoreKey, 0).ToString();
+        SaveRecord();
     }
 
 
@@ -177,6 +183,7 @@ public class GameController : MonoBehaviour
                     if (mole != null)
                     {
                         mole.OnHitMole();
+                        points += 100;
                     }
                 }
             }
@@ -193,6 +200,16 @@ public class GameController : MonoBehaviour
             moles[i].ResetMole(moles[i].initTimeMin, moles[i].initTimeMax);
         }
         playing = true;
+    }
+
+    public void SaveRecord()
+    {
+        if (points > PlayerPrefs.GetInt(highScoreKey, record))
+        {
+            PlayerPrefs.SetInt(highScoreKey, points);
+            PlayerPrefs.Save();
+            recordText.text = record.ToString();
+        }
     }
 
     /// <summary>

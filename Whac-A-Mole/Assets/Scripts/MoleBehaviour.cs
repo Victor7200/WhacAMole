@@ -9,6 +9,8 @@ public class MoleBehaviour : MonoBehaviour
     bool isShown = false;
     public float initTimeMin = 0.5f;
     public float initTimeMax = 3.5f;
+    public float tiempoQueLlevaMostrado;
+    public float tiempoMaximo;
     private bool moleIsRunning = true;
 
 
@@ -30,6 +32,7 @@ public class MoleBehaviour : MonoBehaviour
                 //transform.position = originalPosition;
                 LeanTween.move(gameObject, originalPosition, 0.20f);
                 isShown = true;
+                tiempoQueLlevaMostrado += Time.deltaTime;
 
                 timeToStartMoving = Random.Range(3.5f, 7.8f);
             }
@@ -38,13 +41,12 @@ public class MoleBehaviour : MonoBehaviour
                 ResetMole(3.5f, 7.8f);
             }
         }
-       
     }
 
     public void ResetMole()
     {
-
         ResetMole(initTimeMin, initTimeMax);
+        //tiempoMaximo = Random.Range(initTimeMin, initTimeMax);
     }
     public void ResetMole(float minTime, float maxTime, bool force = false)
     {
