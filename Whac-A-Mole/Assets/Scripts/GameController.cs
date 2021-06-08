@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
 
     public float gameDuration = 60f;
     public float timePlayed;
+    public float timeScale = -0.5f;
 
     int points = 0;
     int clicks = 0;
@@ -40,6 +41,7 @@ public class GameController : MonoBehaviour
             Destroy(this);
         }
 
+        //Intento de ajustar el tiempo y la aleatoriedad del powerup
         /*powerUpBomba = Random.Range(0.0f, 1.0f);
 
         if (powerUpBomba > 0.5f && timePlayed > 3)
@@ -67,6 +69,8 @@ public class GameController : MonoBehaviour
         mainMenu.SetActive(true);
         endScreen.SetActive(false);
         recordPanel.SetActive(false);
+
+        Debug.Log("Record de " + PlayerPrefs.GetString("playerName"));
     }
 
     // Update is called once per frame
@@ -94,25 +98,31 @@ public class GameController : MonoBehaviour
             }         
         }
 
+        //Powerup del tiempo
         if (playing == true && isSlowed == true)
         {
             for(float i = 0; i < 5; i++)
             {
-                i+= Time.deltaTime;
-                timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed/2.0f);
+                timePlayed = timePlayed + (Time.deltaTime * Time.timeScale);
+                timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed);
+
+                if (i > 4)
+                {
+                    isSlowed = false;
+                }
             }
         }
 
+        //Actualización de textos y almacenamiento del nombre del jugador junto al récord en la función Save Record
         pointsText.text = "Puntuación: " + points;
 
         timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed);
 
+        //Se suman los clicks fallidos y clicks para así poder calcular el porcentaje
         clicksTotales = clicks + failedClicks;
 
         PlayerPrefs.SetString("playerName", nameField.ToString());
         PlayerPrefs.Save();
-
-        Debug.Log("Record de " + PlayerPrefs.GetString("playerName"));
 
         highScoreKeyText.text = PlayerPrefs.GetString("playerName") + " : " + PlayerPrefs.GetInt("highScoreKey");
 
@@ -124,6 +134,7 @@ public class GameController : MonoBehaviour
 
     void ShowEndScreen()
     {
+        //Pantalla de final de partida con toda la información correspondiente y el cálculo de clicks fallados y porcentaje acertado
         endScreen.SetActive(true);
         infoGame.text = " Total points : " + points + "\n " +  "\n " + (clicks*100/clicksTotales) + "% clicks acertados \n" + failedClicks + " clicks fallados";
     }
@@ -178,7 +189,6 @@ public class GameController : MonoBehaviour
         mainMenu.SetActive(true);
         endScreen.SetActive(false);
         recordPanel.SetActive(false);
-
     }
 
     /// <summary>
@@ -207,31 +217,29 @@ public class GameController : MonoBehaviour
                         mole.OnHitMole();
                         points += 100;
                     }
-
+                    //Se suma 1 al contador de clicks
                     clicks++;
                 }
                 else
                 {
+                    //Se suma uno al contador de fallos
                     failedClicks++;
                 }
 
+                //Powerup Bomba
                 if (hitInfo.collider.tag.Equals("Bomba"))
                 {
                     padreTopo.GetComponentInChildren<MoleBehaviour>();
                     if (padreTopo != null)
                     {
-                        for(int i = 0; i<9; i++)
-                        {
-                            if (MoleBehaviour.instance.originalPosition.y > 0)
-                            {
-                                points += 100;
-                            }
-                        }
+                        padreTopo.GetComponentInChildren<MoleBehaviour>().isShown = false;
                     }
 
                     clicks++;
                 }
 
+                //Tag del tiempo para activar este bool y que se reproduzca la función que hay en
+                //El update del powerup
                 if (hitInfo.collider.tag.Equals("Tiempo"))
                 {
                     isSlowed = true;
@@ -254,6 +262,7 @@ public class GameController : MonoBehaviour
         playing = true;
     }
 
+    //Función encargada de actualizar y almacenar el récord
     public void SaveRecord()
     {
         if (points > PlayerPrefs.GetInt("highScoreKey", record))

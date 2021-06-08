@@ -806,6 +806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 0.5
   initTimeMax: 4.5
 --- !u!1 &327969383
@@ -2457,6 +2458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 3
   initTimeMax: 14
 --- !u!1 &757977605
@@ -3155,7 +3157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &985877181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4921,6 +4923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 4
   initTimeMax: 8
 --- !u!1 &1443068523
@@ -5381,6 +5384,7 @@ MonoBehaviour:
   isSlowed: 0
   gameDuration: 60
   timePlayed: 0
+  timeScale: -0.5
   powerUpBomba: 0
   nameField: {fileID: 1006123068}
   infoGame: {fileID: 382080007}
@@ -5845,6 +5849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 0.5
   initTimeMax: 3.5
 --- !u!1 &1857972638
@@ -5954,6 +5959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 8
   initTimeMax: 12
 --- !u!1 &1956133800
@@ -6115,6 +6121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 2.5
   initTimeMax: 3.5
 --- !u!1 &2001237856
@@ -6224,6 +6231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 5
   initTimeMax: 10
 --- !u!1 &2073840529
@@ -6548,5 +6556,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPosition: {x: 0, y: 0, z: 0}
+  isShown: 0
   initTimeMin: 5
   initTimeMax: 6

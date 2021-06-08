@@ -7,7 +7,7 @@ public class MoleBehaviour : MonoBehaviour
     public static MoleBehaviour instance;
     public Vector3 originalPosition;
     float timeToStartMoving = 1.0f;
-    bool isShown = false;
+    public bool isShown = false;
     public float initTimeMin = 0.5f;
     public float initTimeMax = 3.5f;
     private bool moleIsRunning = true;
