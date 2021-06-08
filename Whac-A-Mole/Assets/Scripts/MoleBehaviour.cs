@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class MoleBehaviour : MonoBehaviour
 {
-    Vector3 originalPosition;
+    public static MoleBehaviour instance;
+    public Vector3 originalPosition;
     float timeToStartMoving = 1.0f;
     bool isShown = false;
     public float initTimeMin = 0.5f;
     public float initTimeMax = 3.5f;
-    public float tiempoQueLlevaMostrado;
-    public float tiempoMaximo;
     private bool moleIsRunning = true;
 
 
     // Start is called before the first frame update
     void Awake()
-    {
+    {        
+        if (MoleBehaviour.instance == null)
+        {
+        
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         originalPosition = transform.position;
         ResetMole(initTimeMin, initTimeMax, true);
     }
@@ -32,7 +40,6 @@ public class MoleBehaviour : MonoBehaviour
                 //transform.position = originalPosition;
                 LeanTween.move(gameObject, originalPosition, 0.20f);
                 isShown = true;
-                tiempoQueLlevaMostrado += Time.deltaTime;
 
                 timeToStartMoving = Random.Range(3.5f, 7.8f);
             }

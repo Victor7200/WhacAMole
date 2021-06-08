@@ -7,12 +7,13 @@ using TMPro;
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
-    public GameObject mainMenu, inGameUI, endScreen, recordPanel;
+    public GameObject mainMenu, inGameUI, endScreen, recordPanel, padreTopo;
 
     public Transform molesParent;
     private MoleBehaviour[] moles;
 
     public bool playing = false;
+    public bool isSlowed = false;
 
     public float gameDuration = 60f;
     public float timePlayed;
@@ -22,9 +23,9 @@ public class GameController : MonoBehaviour
     int record = 0;
     int clicksTotales;
     int failedClicks;
+    public float powerUpBomba;
 
     public TMP_InputField nameField;
-    string playerName;
 
     public TextMeshProUGUI infoGame, pointsText,timeText,recordText,highScoreKeyText;
 
@@ -39,6 +40,12 @@ public class GameController : MonoBehaviour
             Destroy(this);
         }
 
+        /*powerUpBomba = Random.Range(0.0f, 1.0f);
+
+        if (powerUpBomba > 0.5f && timePlayed > 3)
+        {
+            PowerUpAnimation.instance.MoverIzquierda();
+        }*/
     }
 
     void ConfigureInstance()
@@ -65,6 +72,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (playing == true)
         {
             timePlayed += Time.deltaTime;
@@ -86,15 +94,29 @@ public class GameController : MonoBehaviour
             }         
         }
 
+        if (playing == true && isSlowed == true)
+        {
+            for(float i = 0; i < 5; i++)
+            {
+                i+= Time.deltaTime;
+                timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed/2.0f);
+            }
+        }
+
         pointsText.text = "Puntuación: " + points;
 
         timeText.text = "Tiempo de partida: " + Mathf.FloorToInt(timePlayed);
 
         clicksTotales = clicks + failedClicks;
 
-        highScoreKeyText.text = PlayerPrefs.GetString(("playerName").ToString()) + ": " + PlayerPrefs.GetInt(("highScoreKey").ToString());
+        PlayerPrefs.SetString("playerName", nameField.ToString());
+        PlayerPrefs.Save();
 
-        recordText.text = "Récord: " + PlayerPrefs.GetInt(("highScoreKey").ToString()) + " por Víctor "; //PlayerPrefs.GetString(("playerName").ToString());
+        Debug.Log("Record de " + PlayerPrefs.GetString("playerName"));
+
+        highScoreKeyText.text = PlayerPrefs.GetString("playerName") + " : " + PlayerPrefs.GetInt("highScoreKey");
+
+        recordText.text = "Récord: " + PlayerPrefs.GetInt("highScoreKey") + " por " + PlayerPrefs.GetString("playerName");
 
         SaveRecord();
     }
@@ -145,9 +167,6 @@ public class GameController : MonoBehaviour
         points = 0;
         clicks = 0;
         failedClicks = 0;
-        PlayerPrefs.SetString("playerName", nameField.ToString());
-        PlayerPrefs.Save();
-        Debug.Log("Record de " + nameField);
     }
 
     public void EnterMainScreen()
@@ -194,6 +213,30 @@ public class GameController : MonoBehaviour
                 else
                 {
                     failedClicks++;
+                }
+
+                if (hitInfo.collider.tag.Equals("Bomba"))
+                {
+                    padreTopo.GetComponentInChildren<MoleBehaviour>();
+                    if (padreTopo != null)
+                    {
+                        for(int i = 0; i<9; i++)
+                        {
+                            if (MoleBehaviour.instance.originalPosition.y > 0)
+                            {
+                                points += 100;
+                            }
+                        }
+                    }
+
+                    clicks++;
+                }
+
+                if (hitInfo.collider.tag.Equals("Tiempo"))
+                {
+                    isSlowed = true;
+
+                    clicks++;
                 }
             }
         }
